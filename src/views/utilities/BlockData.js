@@ -26,7 +26,7 @@ const FilterSearchblock = ({ block, department }) => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/departments/categories/${block}/${department}`);
+        const response = await axios.get(`https://cbitmis-backend-3.onrender.com/api/departments/categories/${block}/${department}`);
         setCategories(response.data);
       } catch (error) {
         console.error(`Error fetching categories for department ${department} in block ${block}:`, error);
@@ -41,7 +41,7 @@ const FilterSearchblock = ({ block, department }) => {
 
   const handleCategorySelect = async (category) => {
     setSelectedCategory(category);
-    const url = `http://localhost:5000/api/departments/${block}/${department}/${category}`;
+    const url = `https://cbitmis-backend-3.onrender.com/api/departments/${block}/${department}/${category}`;
     try {
       const response = await axios.get(url);
       setDepartmentData(response.data);
