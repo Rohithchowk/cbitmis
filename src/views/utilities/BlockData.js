@@ -8,17 +8,17 @@ import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import TablePagination from '@mui/material/TablePagination';
-import Button from '@mui/material/Button'; // Import Button from Material-UI
+import Button from '@mui/material/Button';
 import * as XLSX from 'xlsx';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 
 const FilterSearchblock = ({ block, department }) => {
   const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState('labs'); // Initialize with 'labs'
+  const [selectedCategory, setSelectedCategory] = useState('labs');
   const [departmentData, setDepartmentData] = useState([]);
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [jsonData, setJsonData] = useState(null);
   const [excelGenerated, setExcelGenerated] = useState(false);
   const [pdfGenerated, setPdfGenerated] = useState(false);
@@ -70,7 +70,7 @@ const FilterSearchblock = ({ block, department }) => {
         console.error('Error fetching data:', error);
       });
   };
-  
+
   const convertJsonToExcel = () => {
     if (!jsonData) return;
 
@@ -78,7 +78,10 @@ const FilterSearchblock = ({ block, department }) => {
     const data = jsonData.map(item => {
       const row = {};
       keys.forEach(key => {
-        row[key] = item[key];
+        if (key !== '_id') {
+          console.log(key);
+          row[key] = item[key];
+        }
       });
       return row;
     });
@@ -96,8 +99,13 @@ const FilterSearchblock = ({ block, department }) => {
   const convertJsonToPDF = () => {
     if (!jsonData) return;
 
+    const keys = Object.keys(jsonData[0]).filter(key => key !== '_id');
+    const data = jsonData.map(item =>
+      keys.map(key => (typeof item[key] === 'boolean' ? (item[key] ? 'Yes' : 'No') : item[key]))
+    );
+
     const doc = new jsPDF();
-    doc.autoTable({ html: '#jsonTable' });
+    doc.autoTable({ head: [keys], body: data });
     doc.save('jsonData.pdf');
 
     setPdfGenerated(true);
