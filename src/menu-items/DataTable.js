@@ -84,7 +84,7 @@ const FilterSearch = () => {
   useEffect(() => {
     const fetchBlocks = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/departments/blocks');
+        const response = await axios.get('https://cbitmis-backend-3.onrender.com/api/departments/blocks');
         setBlocks(response.data);
       } catch (error) {
         console.error('Error fetching blocks:', error);
@@ -97,7 +97,7 @@ const FilterSearch = () => {
     const block = event.target.value;
     setSelectedBlock(block);
     try {
-      const response = await axios.get(`http://localhost:5000/api/departments/departments/${block}`);
+      const response = await axios.get(`https://cbitmis-backend-3.onrender.com/api/departments/departments/${block}`);
       setDepartments(response.data);
     } catch (error) {
       console.error(`Error fetching departments for block ${block}:`, error);
